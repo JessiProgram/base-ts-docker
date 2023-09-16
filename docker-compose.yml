@@ -1,0 +1,20 @@
+version: "3"
+services:
+  typescript-express-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/usr/src/app/src
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    command: >
+      sh -c "if [ '$ENVIRONMENT' = 'development' ]; then
+        npm run dev;
+      elif [ '$ENVIRONMENT' = 'production' ]; then
+        npm run start:prod;
+      else
+        echo 'ERROR: Invalid ENVIRONMENT value' && exit 1;
+      fi"
